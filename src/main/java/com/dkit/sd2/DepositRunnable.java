@@ -1,39 +1,41 @@
 package com.dkit.sd2;
 
-
 /**
- * A deposit runnable makes periodic deposits to a bank account.
+ * This Runnable task will deposit an 'amount' of money into
+ * a shared bankAccount object, a number of times, delaying (sleeping)
+ * for "DELAY" number of milliseconds between each deposit.
  */
 public class DepositRunnable implements Runnable
 {
-    private static final int DELAY = 1;
-    private BankAccount account;
+    private static final int DELAY_MILLISECONDS = 100;   // milliseconds
+    private BankAccount bankAccount;
     private double amount;
-    private int count;
+    private int numberOfDeposits;
 
     /**
      * Constructs a deposit runnable.
+     * Set up the deposit amount and the number of deposits to make for a given BankAccount
      *
-     * @param anAccount the account into which to deposit money
-     * @param anAmount  the amount to deposit in each repetition
-     * @param aCount    the number of repetitions
+     * @param bankAccount the account into which to deposit money
+     * @param amount  the amount to deposit in each repetition
+     * @param numberOfDeposits    the number of repetitions
      */
-    public DepositRunnable(BankAccount anAccount, double anAmount,
-                           int aCount)
+    public DepositRunnable(BankAccount bankAccount, double amount, int numberOfDeposits)
     {
-        account = anAccount;
-        amount = anAmount;
-        count = aCount;
+        this.bankAccount = bankAccount;
+        this.amount = amount;
+        this.numberOfDeposits = numberOfDeposits;
     }
 
     public void run()
     {
         try
         {
-            for (int i = 1; i <= count; i++)
+            for (int i = 1; i <= numberOfDeposits; i++)
             {
-                account.deposit(amount);
-                Thread.sleep(DELAY);
+                bankAccount.deposit(amount);    // the deposit() method will run in this thread
+
+                Thread.sleep(DELAY_MILLISECONDS);    // pause for specified time
             }
         } catch (InterruptedException exception)
         {
